@@ -1,18 +1,42 @@
 #!/usr/bin/env bash
 # add subdomain
 
-dns_config () {
-    script=$(dig "$2"."$1" | grep -A1 'ANSWER SECTION:' | tr '\t' '\n' | tail -2 | tr '\n' ' ')
-    echo "$2 $script" | awk '{print "The subdomain " $1 " is a " $2 " record and points to " $3}'
-}
+dom_name=$1
+sub_domain=$2
+parse_display() {
+    if [ $# -eq 2 ]
+    then
+        search="$2.$1"
+        sub=$(dig "$search" | grep -A1 'ANSWER SECTION:' | awk '{ print $1}' | tail -1 | cut -d '.' -f 1)
+        a_rec=$(dig "$search" | grep -A1 'ANSWER SECTION:' | awk '{ print $4}' | tail -1 | cut -d '.' -f 1)
+        ip=$(dig "$search" | grep -A1 'ANSWER SECTION:' | awk '{ print $5}' | tail -1 )
+        echo "The subdomain $sub is a $a_rec record and points to $ip"
+    else
+        sub=$(dig www."$1" | grep -A1 'ANSWER SECTION:' | awk '{ print $1}' | tail -1 | cut -d '.' -f 1)
+        a_rec=$(dig www."$1" | grep -A1 'ANSWER SECTION:' | awk '{ print $4}' | tail -1 | cut -d '.' -f 1)
+        ip=$(dig www."$1" | grep -A1 'ANSWER SECTION:' | awk '{ print $5}' | tail -1 )    
+        echo "The subdomain $sub is a $a_rec record and points to $ip"
+        
+        sub=$(dig lb-01."$1" | grep -A1 'ANSWER SECTION:' | awk '{ print $1}' | tail -1 | cut -d '.' -f 1)
+        a_rec=$(dig lb-01."$1" | grep -A1 'ANSWER SECTION:' | awk '{ print $4}' | tail -1 | cut -d '.' -f 1)
+        ip=$(dig lb-01."$1" | grep -A1 'ANSWER SECTION:' | awk '{ print $5}' | tail -1 )    
+        echo "The subdomain $sub is a $a_rec record and points to $ip"
+        
+        sub=$(dig web-01."$1" | grep -A1 'ANSWER SECTION:' | awk '{ print $1}' | tail -1 | cut -d '.' -f 1)
+        a_rec=$(dig web-01."$1" | grep -A1 'ANSWER SECTION:' | awk '{ print $4}' | tail -1 | cut -d '.' -f 1)
+        ip=$(dig web-01."$1" | grep -A1 'ANSWER SECTION:' | awk '{ print $5}' | tail -1 )    
+        echo "The subdomain $sub is a $a_rec record and points to $ip"
+        
+        sub=$(dig web-02."$1" | grep -A1 'ANSWER SECTION:' | awk '{ print $1}' | tail -1 | cut -d '.' -f 1)
+        a_rec=$(dig web-02."$1" | grep -A1 'ANSWER SECTION:' | awk '{ print $4}' | tail -1 | cut -d '.' -f 1)
+        ip=$(dig web-02."$1" | grep -A1 'ANSWER SECTION:' | awk '{ print $5}' | tail -1 )    
+        echo "The subdomain $sub is a $a_rec record and points to $ip"
+    fi
 
-if [ "$#" == 1 ]
+}
+if [ $# -eq 2 ]
 then
-  dns_config "$1" "www"
-  dns_config "$1" "lb-01"
-  dns_config "$1" "web-01"
-  dns_config "$1" "web-02"
-elif [ "$#" == 2 ]
-then
-  dns_config "$1" "$2"
+    parse_display "$dom_name" "$sub_domain"
+else
+    parse_display "$dom_name"
 fi
