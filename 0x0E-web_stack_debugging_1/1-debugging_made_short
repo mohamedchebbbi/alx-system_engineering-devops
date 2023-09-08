@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 # fix short and sweet
-
-if ! service nginx status &> /dev/null; then
-    echo "nginx is not running"
-fi
+sudo sed -i "s/8080/80/" /etc/nginx/sites-enabled/default
+service nginx restart
+echo '' > /run/nginx.pid
