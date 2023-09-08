@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # fix short and sweet
 
-cp -f /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default
-service nginx restart
-echo '9791' | sudo tee /run/nginx.pid
+if ! service nginx status &> /dev/null; then
+    echo "nginx is not running"
+fi
