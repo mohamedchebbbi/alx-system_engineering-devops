@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # fix short and sweet
 
-sed -i 's/8080/80/g' /etc/nginx/sites-enabled/default
+cp -f /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default
 service nginx restart
-pkill -o nginx
+echo '9791' | sudo tee /run/nginx.pid
