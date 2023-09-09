@@ -37,6 +37,11 @@ frontend  mohamedchebbbi_frontend
         bind *:80
         mode http
         default_backend mohamedchebbbi_backend
+frontend mohamedchebbbi-frontend-https
+	bind *:443 ssl crt /etc/haproxy/certs/www.ls24musicofficial.tech.pem
+	http-request set-header X-Forwarded-Proto https
+	http-request redirect scheme https code 301 unless { ssl_fc }
+	default_backend mohamedchebbbi-backend
 backend mohamedchebbbi_backend
         balance roundrobin
         server 24812-web-01 54.208.28.27:80 check
