@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+# config ufw firewall to block incoming traffic
+# exept tcp port 22 80 443
+
+sudo apt install ufw
+sudo ufw disable
+sudo ufw default deny incoming
+sudo ufw allow 22/tcp
+sudo ufw allow 443/tcp
+sudo ufw allow 80/tcp
+sudo ufw enable
+sudo ufw status verbose
