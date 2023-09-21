@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
-# Fixes the issue with the serv
-# Update the nginx.conf file to run Nginx as the 'nginx' user
+# Update the nginx config file to run Nginx as the 'nginx' user
 sed -i 's/user  nginx;/user  nginx;\n/' /etc/nginx/nginx.conf
 
 # Run Nginx on port 8080 and listen on all active IPs
