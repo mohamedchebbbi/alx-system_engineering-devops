@@ -1,0 +1,21 @@
+server {
+    listen 80;
+    listen [::]:80 default_server;
+
+    # use ip of server as domain name
+    server_name 54.208.28.27
+
+    # costumize http response header
+    add_header X-Served-By 24812-web-01;
+
+    # serve /airbnb-onepage/ route on Airbnb_clone_v3
+    location = /airbnb-onepage/ {
+        proxy_pass http://127.0.0.1:5000/airbnb-onepage/;
+    }
+
+    error_page 404 /404.html;
+    location /404 {
+      root /var/www/html;
+      internal;
+    }
+}
